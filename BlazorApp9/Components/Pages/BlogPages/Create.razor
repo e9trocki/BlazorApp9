@@ -1,0 +1,58 @@
+﻿@page "/blogs/create"
+@inject BlazorApp9.Data.BlazorApp9Context DB
+@using BlazorApp9
+@inject NavigationManager NavigationManager
+
+<PageTitle>DODAJ</PageTitle>
+
+<h1>DODAJ</h1>
+
+<h4>PRAKTYKI</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Blog" OnValidSubmit="AddBlog" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="DATA" class="form-label">DATA</label> 
+                <InputText id="DATA" @bind-Value="Blog.Name" class="form-control" /> 
+                <ValidationMessage For="() => Blog.Name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="TEMAT" class="form-label">TEMAT</label> 
+                <InputText id="TEMAT" @bind-Value="Blog.Description" class="form-control" /> 
+                <ValidationMessage For="() => Blog.Description" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="GODZINA OD" class="form-label">GODZINA OD</label> 
+                <InputText id="GODZINA OD" @bind-Value="Blog.Author" class="form-control" /> 
+                <ValidationMessage For="() => Blog.Author" class="text-danger" /> 
+            </div>
+            <div class="mb-3">
+                <label for="GODZINA DO" class="form-label">GODZINA DO</label> 
+                <InputText id="GODZINA DO" @bind-Value="Blog.Author" class="form-control" /> 
+                <ValidationMessage For="() => Blog.Author" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/blogs">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Blog Blog { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddBlog()
+    {
+        DB.Blog.Add(Blog);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/blogs");
+    }
+}

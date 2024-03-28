@@ -1,0 +1,51 @@
+﻿@page "/blogs/details"
+@inject BlazorApp9.Data.BlazorApp9Context DB
+@using BlazorApp9
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Blog</h4>
+    <hr />
+    @if (blog is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">DATA</dt>
+            <dd class="col-sm-10">@blog.Name</dd>
+            <dt class="col-sm-2">TEMAT</dt>
+            <dd class="col-sm-10">@blog.Description</dd>
+            <dt class="col-sm-2">GODZINA OD</dt>
+            <dd class="col-sm-10">@blog.Author</dd>
+            <dt class="col-sm-2">GODZINA DO</dt>
+            <dd class="col-sm-10">@blog.Author</dd>
+        </dl>
+        <div>
+            <a href="@($"/blogs/edit?id={blog.Id}")">Edit</a> |
+            <a href="@($"/blogs")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    Blog? blog;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        blog = await DB.Blog.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (blog is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}
